@@ -1,25 +1,55 @@
 // @/pages/Checkout.tsx
 
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useCart } from "@/contexts/CartContext";
-import { ArrowLeft } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+// === (SỬA LẠI: GỠ LOADER2) ===
+import { ArrowLeft } from "lucide-react"; 
 import { Separator } from "@/components/ui/separator";
 
-// === (ĐÃ GỠ BỎ APPS SCRIPT) ===
+// === DÁN LINK GOOGLE FORM CỦA BẠN VÀO ĐÂY ===
 const GOOGLE_FORM_URL = "https://forms.gle/tTcYYvFw3BjzER8QA"; 
-// === (SỬ DỤNG GOOGLE FORM) ===
+// === (ĐÃ GỠ BỎ APPS SCRIPT) ===
 
 
 export default function Checkout() {
-  const { cartItems, totalPrice } = useCart(); // Đã gỡ clearCart vì Form sẽ xử lý
+  const { cartItems, totalPrice } = useCart();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
-  // === (ĐÃ GỠ BỎ isSubmitting VÀ customerInfo) ===
+  // === (GIỮ LẠI STATE THÔNG TIN KHÁCH HÀNG) ===
+  const [customerInfo, setCustomerInfo] = useState({
+    fb: "",
+    email: "",
+    phone: ""
+  });
+  // === (ĐÃ GỠ isSubmitting) ===
 
-  const handleRedirectToForm = (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setCustomerInfo(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // === (GIỮ LẠI VALIDATION) ===
+    if (!customerInfo.phone && !customerInfo.email && !customerInfo.fb) {
+      toast({
+        title: "Lỗi",
+        description: "Vui lòng nhập ít nhất một thông tin liên hệ (SĐT, Email hoặc FB/IG).",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // === (ĐÃ GỠ BỎ TOÀN BỘ LOGIC APPS SCRIPT VÀ FETCH) ===
+    
     // === (SỬA LỖI: Chuyển hướng đến Google Form) ===
     window.location.href = GOOGLE_FORM_URL;
   };
@@ -52,12 +82,28 @@ export default function Checkout() {
           Tiếp tục mua sắm
         </Button>
       
-        <form onSubmit={handleRedirectToForm} className="space-y-8">
+        <form onSubmit={handleSubmitOrder} className="space-y-8">
           
-          {/* === (ĐÃ GỠ BỎ PHẦN NHẬP THÔNG TIN) === */}
-          {/* Google Form sẽ thay thế phần này */}
+          {/* === (GIỮ NGUYÊN FORM THÔNG TIN) === */}
+          <div className="rounded-lg border p-6">
+            <h2 className="text-2xl font-semibold mb-6">Thông tin đặt hàng</h2>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="fb">Link Facebook / Instagram *</Label>
+                <Input id="fb" value={customerInfo.fb} onChange={handleInputChange} placeholder="https... (cần ít nhất 1 trong 3)" />
+              </div>
+              <div>
+                <Label htmlFor="email">Email *</Label>
+                <Input id="email" type="email" value={customerInfo.email} onChange={handleInputChange} placeholder="email@example.com" />
+              </div>
+              <div>
+                <Label htmlFor="phone">Số điện thoại *</Label>
+                <Input id="phone" type="tel" value={customerInfo.phone} onChange={handleInputChange} placeholder="090... (ưu tiên SĐT)" required />
+              </div>
+            </div>
+          </div>
 
-          {/* 1. Giỏ hàng (Giống ảnh) */}
+          {/* 2. Giỏ hàng (Giống ảnh) */}
           <div className="rounded-lg border p-6">
             <h2 className="text-2xl font-semibold mb-6">Giỏ hàng</h2>
             <div className="space-y-4">
@@ -85,7 +131,7 @@ export default function Checkout() {
             </div>
           </div>
 
-          {/* 2. Tổng cộng (Giống ảnh) */}
+          {/* 3. Tổng cộng (Giống ảnh) */}
           <div className="rounded-lg border p-6 space-y-4">
             <div className="flex justify-between items-center text-lg font-medium">
               <span>Tổng cộng:</span>
@@ -98,8 +144,8 @@ export default function Checkout() {
               type="submit"
               className="w-full bg-gradient-primary"
               size="lg"
+              // === (ĐÃ GỠ BỎ NÚT DISABLED VÀ LOADER) ===
             >
-              {/* === (ĐÃ GỠ BỎ LOADER) === */}
               Đặt hàng ngay
             </Button>
           </div>
