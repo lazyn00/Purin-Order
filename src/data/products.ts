@@ -29,7 +29,7 @@ export const productsData = [
       "https://images.unsplash.com/photo-1614680376739-414d95ff43df?w=800"
     ],
     category: "Merch",
-    artist: "CORTIS"
+    artist: "CORTIS",
     variants: ["Full Set 6 members"]
   },
   {
