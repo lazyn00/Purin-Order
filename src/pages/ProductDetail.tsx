@@ -172,22 +172,18 @@ export default function ProductDetail() {
         </Button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Image Carousel (Đã sửa lại để giữ định dạng ảnh gốc) */}
+          {/* Image Carousel (Đã sửa lại, gỡ aspect-square) */}
           <div className="space-y-4">
             <Carousel className="w-full" setApi={setCarouselApi}>
               <CarouselContent>
                 {product.images.map((image, index) => (
                   <CarouselItem key={index}>
-                    {/* === (ĐÃ SỬA LỖI) Giữ định dạng ảnh gốc === */}
-                    {/*
-                      Chúng ta tạo 1 ô vuông `aspect-square` làm nền
-                      và dùng `object-contain` để ảnh gốc nằm bên trong ô đó
-                    */}
-                    <div className="relative overflow-hidden rounded-lg border aspect-square flex items-center justify-center bg-muted/20">
+                    {/* === (ĐÃ SỬA LỖI) Giới hạn chiều cao === */}
+                    <div className="relative overflow-hidden rounded-lg border flex items-center justify-center bg-muted/20">
                       <img
                         src={image}
                         alt={`${product.name} - ${index + 1}`}
-                        className="max-h-full max-w-full object-contain" // Giữ định dạng gốc
+                        className="w-auto h-auto max-w-full max-h-[500px] object-contain" // Giữ định dạng gốc, giới hạn 500px
                       />
                     </div>
                     {/* === KẾT THÚC SỬA LỖI === */}
