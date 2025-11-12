@@ -55,9 +55,7 @@ export default function Products() {
                 <SelectContent>
                   <SelectItem value="all">Tất cả danh mục</SelectItem>
                   <SelectItem value="Outfit & Doll">Outfit & Doll</SelectItem>
-                  {/* === (ĐÃ SỬA LỖI) === */}
                   <SelectItem value="Merch">Merch</SelectItem>
-                  {/* === KẾT THÚC SỬA LỖI === */}
                   <SelectItem value="Khác">Khác</SelectItem>
                 </SelectContent>
               </Select>
@@ -69,8 +67,10 @@ export default function Products() {
               <Select value={selectedArtist} onValueChange={setSelectedArtist}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Nhóm nhạc/Artist" />
-                </Trigger>
+                </SelectTrigger>
+                {/* === (ĐÃ SỬA LỖI) === */}
                 <SelectContent>
+                {/* === KẾT THÚC SỬA LỖI === */}
                   <SelectItem value="all">Tất cả artist</SelectItem>
                   {artists.slice(1).map(artist => (
                     <SelectItem key={artist} value={artist}>{artist}</SelectItem>
@@ -85,8 +85,10 @@ export default function Products() {
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Sắp xếp" />
-                </Trigger>
+                </SelectTrigger>
+                {/* === (ĐÃ SỬA LỖI) === */}
                 <SelectContent>
+                {/* === KẾT THÚC SỬA LỖI === */}
                   <SelectItem value="default">Mặc định</SelectItem>
                   <SelectItem value="price-asc">Giá: Thấp đến cao</SelectItem>
                   <SelectItem value="price-desc">Giá: Cao đến thấp</SelectItem>
