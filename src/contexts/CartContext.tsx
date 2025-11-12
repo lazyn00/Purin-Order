@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
+// (Định nghĩa Product giữ nguyên)
 export interface Product {
   id: number;
   name: string;
@@ -9,22 +10,28 @@ export interface Product {
   images: string[];
   category: string;
   artist: string;
-  variants?: string[];
-  variantImageMap?: { [key: string]: number }; // Map variant to image index
+  // (Định nghĩa kiểu variants mới cho chính xác)
+  variants: { name: string; price: number }[];
+  optionGroups?: { name: string; options: string[] }[]; // Thêm cho sản phẩm 2 phân loại
+  variantImageMap?: { [key: string]: number }; 
   feesIncluded?: boolean;
   master?: string;
+  status?: string;
+  orderDeadline?: string | null;
 }
 
 export interface CartItem extends Product {
   quantity: number;
-  selectedVariant?: string;
+  selectedVariant: string; // Đổi thành string, vì chúng ta luôn có variant (kể cả "Full Set")
 }
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (product: Product, quantity: number, variant?: string) => void;
-  removeFromCart: (productId: number) => void;
-  updateQuantity: (productId: number, quantity: number) => void;
+  addToCart: (product: Product, quantity: number, variant: string) => void;
+  // === (SỬA ĐỔI) Thêm 'variant' vào 2 hàm này ===
+  removeFromCart: (productId: number, variant: string) => void;
+  updateQuantity: (productId: number, variant: string, quantity: number) => void;
+  // === KẾT THÚC SỬA ĐỔI ===
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
@@ -35,7 +42,8 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const addToCart = (product: Product, quantity: number, variant?: string) => {
+  // (Hàm này đã đúng logic)
+  const addToCart = (product: Product, quantity: number, variant: string) => {
     setCartItems(prev => {
       const existingItem = prev.find(item => 
         item.id === product.id && item.selectedVariant === variant
@@ -53,20 +61,31 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const removeFromCart = (productId: number) => {
-    setCartItems(prev => prev.filter(item => item.id !== productId));
+  // === (SỬA ĐỔI) Thêm 'variant' để xóa đúng ===
+  const removeFromCart = (productId: number, variant: string) => {
+    setCartItems(prev => prev.filter(item => 
+      !(item.id === productId && item.selectedVariant === variant)
+    ));
   };
+  // === KẾT THÚC SỬA ĐỔI ===
 
-  const updateQuantity = (productId: number, quantity: number) => {
+  // === (SỬA ĐỔI) Thêm 'variant' để cập nhật đúng ===
+  const updateQuantity = (productId: number, variant: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(productId, variant); // Gọi hàm xóa đã sửa
       return;
     }
     setCartItems(prev =>
-      prev.map(item => item.id === productId ? { ...item, quantity } : item)
+      prev.map(item => 
+        (item.id === productId && item.selectedVariant === variant) 
+          ? { ...item, quantity } 
+          : item
+      )
     );
   };
+  // === KẾT THÚC SỬA ĐỔI ===
 
+  // (Hàm này đúng)
   const clearCart = () => {
     setCartItems([]);
   };
