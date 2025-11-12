@@ -58,7 +58,7 @@ export const productsData = [
     price: 107000,
     priceDisplay: "107,000đ",
     description: [
-      "James","Juhoon","Martin","Seunghyeon","Keonho","Full Set 5 members"
+      ""
     ], // <- thêm dấu phẩy ở đây
     images: [
       "https://i.imgur.com/oTsdiml.jpeg",
