@@ -49,6 +49,7 @@ export default function ProductDetail() {
     if (product) {
       setCurrentPrice(product.price);
       
+      // === (SỬA 1) ===
       if (product.orderdeadline) {
         const deadline = new Date(product.orderdeadline);
         if (deadline < new Date()) setIsExpired(true);
@@ -139,11 +140,20 @@ export default function ProductDetail() {
     }));
   };
 
+  // === (SỬA 2) ===
   const handleVariantChange = (variantName: string) => {
     setSelectedVariant(variantName);
     const variant = product?.variants.find(v => v.name === variantName);
     if (variant) {
       setCurrentPrice(variant.price);
+    }
+    
+    // Thêm logic cuộn ảnh
+    if (carouselApi && product?.variantImageMap) {
+      const imageIndex = product.variantImageMap[variantName];
+      if (imageIndex !== undefined) {
+        carouselApi.scrollTo(imageIndex);
+      }
     }
   };
   
@@ -249,6 +259,8 @@ export default function ProductDetail() {
               <p className="text-sm text-muted-foreground mt-2">
                 *{product.feesIncluded ? 'Đã full phí dự kiến' : 'Chưa full phí'}
               </p>
+              
+              {/* === (SỬA 3) === */}
               {product.orderdeadline && !isExpired && (
                  <p className="text-sm text-amber-600 mt-2">
                    Hạn order: {new Date(product.orderdeadline).toLocaleString('vi-VN')}
