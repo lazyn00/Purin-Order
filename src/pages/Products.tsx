@@ -15,14 +15,14 @@ export default function Products() {
 
   const artists = ["all", ...Array.from(new Set(productsData.map(p => p.artist)))];
 
-  // Filter (giữ nguyên)
+  // Filter logic (Giữ nguyên)
   let filteredProducts = productsData.filter(product => {
-    const categoryMatch = selectedCategory === "all" || product.category === "all" || product.category === selectedCategory;
+    const categoryMatch = selectedCategory === "all" || product.category === selectedCategory;
     const artistMatch = selectedArtist === "all" || product.artist === selectedArtist;
     return categoryMatch && artistMatch;
   });
 
-  // Sort (giữ nguyên)
+  // Sort logic (Gi fuchnguyên)
   if (sortBy === "price-asc") {
     filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
   } else if (sortBy === "price-desc") {
@@ -35,26 +35,97 @@ export default function Products() {
     <Layout>
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          {/* ... (Tiêu đề giữ nguyên) ... */}
           <h1 className="text-4xl font-bold mb-4">Sản phẩm Pre-order</h1>
           <p className="text-muted-foreground">
             Order sản phẩm K-pop, C-pop, Anime từ Taobao, PDD, Douyin, XHS, 1688
           </p>
         </div>
 
-        {/* Filters and Sort (Giữ nguyên) */}
+        {/* === (KHÔI PHỤC) FILTERS AND SORT CỦA BẠN === */}
         <div className="mb-8 space-y-4">
-           {/* ... (Toàn bộ phần filter giữ nguyên) ... */}
-        </div>
+          <div className="flex flex-wrap gap-4">
+            {/* Category Dropdown */}
+            <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+              <Filter className="h-4 w-4 text-muted-foreground" />
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Danh mục" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tất cả danh mục</SelectItem>
+                  <SelectItem value="Outfit & Doll">Outfit & Doll</SelectItem>
+                  <SelectItem value="Merch">Merch</SelectItem>
+                  <SelectItem value="Khác">Khác</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-        {/* === (SỬA ĐỔI) LAYOUT RESPONSIVE "DÀY ĐẶC" === */}
-        {/* Mobile: 2, Tablet-SM: 3, Tablet-MD: 4, LG: 5, XL: 6 cột */}
+            {/* Artist Filter */}
+            <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+              <Filter className="h-4 w-4 text-muted-foreground" />
+              <Select value={selectedArtist} onValueChange={setSelectedArtist}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Nhóm nhạc/Artist" />
+                </Trigger>
+                <SelectContent>
+                  <SelectItem value="all">Tất cả artist</SelectItem>
+                  {artists.slice(1).map(artist => (
+                    <SelectItem key={artist} value={artist}>{artist}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Sort */}
+            <div className="flex items-center gap-2 flex-1 min-w-[200px]">
+              <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Sắp xếp" />
+                </Trigger>
+                <SelectContent>
+                  <SelectItem value="default">Mặc định</SelectItem>
+                  <SelectItem value="price-asc">Giá: Thấp đến cao</SelectItem>
+                  <SelectItem value="price-desc">Giá: Cao đến thấp</SelectItem>
+                  <SelectItem value="name">Tên A-Z</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Active filters */}
+          {(selectedCategory !== "all" || selectedArtist !== "all") && (
+            <div className="flex gap-2 items-center">
+              <span className="text-sm text-muted-foreground">Đang lọc:</span>
+              {selectedCategory !== "all" && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setSelectedCategory("all")}
+                >
+                  {selectedCategory} ✕
+                </Button>
+              )}
+              {selectedArtist !== "all" && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setSelectedArtist("all")}
+                >
+                  {selectedArtist} ✕
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+        {/* === KẾT THÚC KHÔI PHỤC === */}
+
+        {/* (LAYOUT "DÀY ĐẶC" MỚI) */}
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product as any} />
           ))}
         </div>
-        {/* === KẾT THÚC SỬA ĐỔI === */}
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">
