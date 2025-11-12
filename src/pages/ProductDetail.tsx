@@ -346,7 +346,8 @@ export default function ProductDetail() {
                   >
                     <SelectTrigger id="variant" className="mt-2">
                       <SelectValue placeholder="Chọn phân loại" />
-                    </TSelectTrigger>
+                    </SelectTrigger>
+                    {/* === (SỬA 5: TYPO) === */}
                     <SelectContent>
                       {product.variants.map((variant) => (
                         <SelectItem key={variant.name} value={variant.name}>
