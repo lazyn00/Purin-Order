@@ -34,7 +34,9 @@ export function ProductCard({ product }: ProductCardProps) {
             </CardTitle>
           </Link>
         </div>
-        <CardDescription className="line-clamp-2">{product.description}</CardDescription>
+        <CardDescription className="line-clamp-2">
+          {Array.isArray(product.description) ? product.description.join(' • ') : product.description}
+        </CardDescription>
         <p className="text-xs text-muted-foreground mt-1">🎤 {product.artist}</p>
       </CardHeader>
       <CardContent>

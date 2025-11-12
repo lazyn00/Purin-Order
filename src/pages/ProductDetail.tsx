@@ -113,11 +113,26 @@ export default function ProductDetail() {
 
             <div className="border-t pt-4">
               <p className="text-4xl font-bold text-primary">{product.priceDisplay}</p>
+              <p className="text-sm text-muted-foreground mt-2">
+                *{product.feesIncluded ? 'Đã full phí dự kiến' : 'Chưa full phí'}
+              </p>
             </div>
 
-            <div className="border-t pt-4">
-              <h3 className="font-semibold mb-2">Mô tả sản phẩm</h3>
-              <p className="text-muted-foreground">{product.description}</p>
+            <div className="border-t pt-4 space-y-3">
+              <div>
+                <h3 className="font-semibold mb-2">Mô tả sản phẩm</h3>
+                <ul className="text-muted-foreground space-y-1">
+                  {product.description.map((item, index) => (
+                    <li key={index}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+              {product.master && (
+                <div>
+                  <h3 className="font-semibold mb-1">Master</h3>
+                  <p className="text-muted-foreground">{product.master}</p>
+                </div>
+              )}
             </div>
 
             {/* Variant Selection */}

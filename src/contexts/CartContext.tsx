@@ -5,11 +5,13 @@ export interface Product {
   name: string;
   price: number;
   priceDisplay: string;
-  description: string;
+  description: string[];
   images: string[];
   category: string;
   artist: string;
-  variant?: string;
+  variants?: string[];
+  feesIncluded?: boolean;
+  master?: string;
 }
 
 export interface CartItem extends Product {
