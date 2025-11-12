@@ -125,9 +125,22 @@ export const productsData = [
     artist: "CORTIS",
 
     status: "Order", 
-    // === ĐÃ SỬA: đổi ngày sang tương lai ===
-    orderDeadline: "2026-01-31T23:59:00", // (còn hạn) 
-    // === KẾT THÚC SỬA ===
+    orderDeadline: "2026-01-31T23:59:00", 
+
+    // === (THÊM MỚI) CẤU TRÚC 2 PHÂN LOẠI ===
+    optionGroups: [
+      {
+        name: "Kiểu viền",
+        options: ["Viền trong", "Viền màu"]
+      },
+      {
+        name: "Thành viên",
+        options: ["James", "Juhoon", "Martin", "Seunghyeon", "Keonho", "Full Set 5 members"]
+      }
+    ],
+    // === KẾT THÚC THÊM MỚI ===
+    
+    // (GIỮ NGUYÊN) Mảng variants vẫn là các chuỗi đã gộp
     variants: [
       { name: "Viền trong-James", price: 48000 },
       { name: "Viền màu-James", price: 48000 },
@@ -142,20 +155,14 @@ export const productsData = [
       { name: "Viền trong-Full Set 5 members", price: 230000 }, 
       { name: "Viền màu-Full Set 5 members", price: 230000 } 
     ],
-
+    
+    // (GIỮ NGUYÊN) Map vẫn dùng chuỗi gộp
     variantImageMap: {
       "Viền trong-Full Set 5 members": 0,
       "Viền màu-Full Set 5 members": 1,
       "Viền trong-James": 2,
       "Viền màu-James": 2,
-      "Viền trong-Juhoon": 3,
-      "Viền màu-Juhoon": 3,
-      "Viền trong-Martin": 4,
-      "Viền màu-Martin": 4,
-      "Viền trong-Seunghyeon": 5,
-      "Viền màu-Seunghyeon": 5,
-      "Viền trong-Keonho": 6,
-      "Viền màu-Keonho": 6
+      // ... (giữ nguyên)
     },
     feesIncluded: false,
     master: "Boky Buyer (xhs)"
