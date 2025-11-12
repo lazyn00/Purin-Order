@@ -86,7 +86,7 @@ const Index = () => {
   <div className="container mx-auto px-4">
     <div className="max-w-3xl mx-auto text-center">
       <h2 className="text-3xl md:text-4xl font-bold mb-6">
-        Về chúng tôi
+        Về Purin
       </h2>
       <p className="text-lg text-muted-foreground mb-6">
         Purin Order chuyên nhận order các sản phẩm K-pop, C-pop, Anime từ các sàn thương mại điện tử
@@ -94,7 +94,7 @@ const Index = () => {
         những sản phẩm độc quyền, phiên bản giới hạn với giá tốt nhất.
       </p>
       <p className="text-lg text-muted-foreground mb-8">
-        Purin có kinh nghiệm order hàng từ Trung Quốc nên bạn yên tâm nha! Chúng tôi sẽ kiểm tra kỹ,
+        Purin có kinh nghiệm order hàng từ Trung Quốc nên bạn yên tâm nha! Purin sẽ kiểm tra kỹ,
         đóng gói cẩn thận và đưa đến tay bạn một cách an toàn. Cần tìm món gì hay muốn hỏi thêm,
         Purin luôn ở đây hỗ trợ bạn 💛
       </p>
