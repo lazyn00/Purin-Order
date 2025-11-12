@@ -13,7 +13,7 @@ import { Loader2, ArrowLeft } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 // === DÁN URL GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY (Bước 3) ===
-const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwvNuv5tQDs0orb8pnHSPZlx3hCsidMp6pW7Az4n3Uu/dev"; // <<< CẦN THAY THẾ
+const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw5BZpSHd9QTYxsmOOZeHx_PFexKYf-6F4zZpCDoUDqswhLxU2DCfF9ltAqKUI322uNRw/exec"; // <<< CẦN THAY THẾ
 // === URL GOOGLE FORM (Dùng để chuyển hướng sau khi gửi Apps Script) ===
 const GOOGLE_FORM_URL = "https://forms.gle/tTcYYvFw3BjzER8QA";
 
