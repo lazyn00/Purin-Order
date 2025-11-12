@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Minus, Plus, CalendarOff } from "lucide-react";
+// === (THÊM MỚI) icon ArrowLeft ===
+import { ShoppingCart, Minus, Plus, CalendarOff, ArrowLeft } from "lucide-react";
+// === KẾT THÚC THÊM MỚI ===
 import { productsData } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
@@ -29,22 +31,13 @@ export default function ProductDetail() {
 
   const product = productsData.find(p => p.id === Number(id));
 
-  // --- (QUAN TRỌNG) NÂNG CẤP STATE ---
-  // 1. State cho giá chung
   const [currentPrice, setCurrentPrice] = useState(product?.price || 0);
-  
-  // 2. State cho sản phẩm có 1 phân loại (ví dụ: "Full Set 5 members")
   const [selectedVariant, setSelectedVariant] = useState<string>(""); 
-  
-  // 3. State cho sản phẩm có nhiều phân loại (ví dụ: { "Kiểu viền": "Viền trong", "Thành viên": "James" })
   const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({});
-  
-  // 4. State cho trạng thái
   const [isExpired, setIsExpired] = useState(false);
-  // --- KẾT THÚC NÂNG CẤP STATE ---
-
-
-  // useEffect cho Carousel (giữ nguyên)
+  
+  // (Các hàm useEffect và handlers giữ nguyên)
+  // ...
   useEffect(() => {
     if (carouselApi && selectedVariant && product?.variantImageMap) {
       const imageIndex = product.variantImageMap[selectedVariant];
@@ -54,7 +47,6 @@ export default function ProductDetail() {
     }
   }, [selectedVariant, carouselApi, product]);
 
-  // useEffect để khởi tạo state khi tải trang
   useEffect(() => {
     if (product) {
       setCurrentPrice(product.price);
@@ -66,15 +58,13 @@ export default function ProductDetail() {
          setIsExpired(false);
       }
       
-      // (MỚI) Khởi tạo state cho nhiều phân loại (id 4)
       if (product.optionGroups) {
         const initialOptions = product.optionGroups.reduce((acc, group) => {
-            acc[group.name] = ""; // Bắt đầu rỗng
+            acc[group.name] = "";
             return acc;
         }, {} as { [key: string]: string });
         setSelectedOptions(initialOptions);
       } 
-      // (CŨ) Khởi tạo cho 1 phân loại (id 1, 2)
       else if (product.variants && product.variants.length === 1) {
           const firstVariant = product.variants[0];
           setSelectedVariant(firstVariant.name);
@@ -83,29 +73,21 @@ export default function ProductDetail() {
     }
   }, [product]);
 
-
-  // === (THÊM MỚI) useEffect ĐỂ XỬ LÝ NHIỀU PHÂN LOẠI ===
-  // Chạy mỗi khi người dùng chọn 1 option
   useEffect(() => {
     if (product?.optionGroups) {
-      // Kiểm tra xem tất cả các group đã được chọn chưa
       const allOptionsSelected = Object.values(selectedOptions).every(val => val !== "");
 
       if (allOptionsSelected) {
-        // 1. Gộp các lựa chọn thành chuỗi (ví dụ: "Viền trong-James")
         const constructedName = product.optionGroups
             .map(group => selectedOptions[group.name])
             .join("-");
         
-        // 2. Tìm variant dựa trên chuỗi đã gộp
         const variant = product.variants.find(v => v.name === constructedName);
         
         if (variant) {
-          // 3. Nếu tìm thấy -> cập nhật giá và state `selectedVariant`
           setCurrentPrice(variant.price);
-          setSelectedVariant(variant.name); // state này sẽ dùng cho giỏ hàng
+          setSelectedVariant(variant.name);
           
-          // 4. Cập nhật ảnh carousel
           if (carouselApi && product.variantImageMap) {
             const imageIndex = product.variantImageMap[variant.name];
             if (imageIndex !== undefined) {
@@ -113,24 +95,18 @@ export default function ProductDetail() {
             }
           }
         } else {
-          // Xử lý trường hợp tổ hợp không tồn tại (ví dụ: Viền màu-Full Set)
-          // Tạm thời reset, bạn có thể đổi logic này
           setSelectedVariant("");
-          setCurrentPrice(product.price); // Reset về giá gốc
+          setCurrentPrice(product.price);
           console.warn("Tổ hợp không hợp lệ:", constructedName);
         }
       }
     }
   }, [selectedOptions, product, carouselApi]);
-  // === KẾT THÚC THÊM MỚI ===
-
-
-  // Hàm Thêm vào giỏ hàng (giữ nguyên, vì nó đọc `selectedVariant`)
+  
   const handleAddToCart = () => {
     const hasOptions = product.optionGroups && product.optionGroups.length > 0;
     const hasVariants = product.variants && product.variants.length > 0;
 
-    // Kiểm tra chung (bất kể 1 hay nhiều phân loại)
     if (hasVariants && !selectedVariant) {
       toast({
         title: "Vui lòng chọn đủ phân loại",
@@ -140,7 +116,7 @@ export default function ProductDetail() {
       return;
     }
 
-    const correctPrice = currentPrice; // Giá đã được cập nhật bởi useEffect
+    const correctPrice = currentPrice; 
 
     const productToAdd = {
       ...product,
@@ -156,7 +132,6 @@ export default function ProductDetail() {
     });
   };
 
-  // (MỚI) Hàm xử lý cho NHIỀU phân loại (id 4)
   const handleOptionChange = (groupName: string, value: string) => {
     setSelectedOptions(prev => ({
       ...prev,
@@ -164,7 +139,6 @@ export default function ProductDetail() {
     }));
   };
 
-  // (CŨ) Hàm xử lý cho MỘT phân loại (id 3)
   const handleVariantChange = (variantName: string) => {
     setSelectedVariant(variantName);
     const variant = product.variants.find(v => v.name === variantName);
@@ -172,16 +146,39 @@ export default function ProductDetail() {
       setCurrentPrice(variant.price);
     }
   };
-
-  // ... (increment/decrement quantity giữ nguyên) ...
+  
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => Math.max(1, prev - 1));
+  // ...
+
+  if (!product) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-12 text-center">
+          <h1 className="text-2xl font-bold mb-4">Không tìm thấy sản phẩm</h1>
+          <Button onClick={() => navigate("/products")}>Quay lại</Button>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
+        
+        {/* === (THÊM MỚI) NÚT QUAY LẠI === */}
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/products")} // Quay lại trang danh sách
+          className="mb-6 gap-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Quay lại trang sản phẩm
+        </Button>
+        {/* === KẾT THÚC THÊM MỚI === */}
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* ... (Phần Image Carousel và Thumbnail giữ nguyên) ... */}
+          {/* Image Carousel (giữ nguyên) */}
           <div className="space-y-4">
             <Carousel className="w-full" setApi={setCarouselApi}>
               <CarouselContent>
@@ -225,7 +222,7 @@ export default function ProductDetail() {
 
           {/* Product Info */}
           <div className="space-y-6">
-            {/* ... (Tên, Trạng thái, Giá, Hạn order giữ nguyên) ... */}
+            {/* Tên, Trạng thái */}
             <div>
               {product.status && (
                 <Badge variant="secondary" className="mb-3">
@@ -235,6 +232,7 @@ export default function ProductDetail() {
               <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
             </div>
 
+            {/* Giá, Hạn order */}
             <div className="border-t pt-4">
               <p className="text-4xl font-bold text-primary">
                 {currentPrice.toLocaleString('vi-VN')}đ
@@ -253,10 +251,25 @@ export default function ProductDetail() {
                  </p>
               )}
             </div>
+            
+            {/* === (KHÔI PHỤC) MÔ TẢ SẢN PHẨM === */}
+            {product.description && product.description.length > 0 && (
+              <div className="border-t pt-4 space-y-3">
+                <div>
+                  <h3 className="font-semibold mb-2">Mô tả sản phẩm</h3>
+                  {/* Dùng list-disc để hiển thị dấu • */}
+                  <ul className="text-muted-foreground space-y-1 list-disc list-inside">
+                    {product.description.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+            {/* === KẾT THÚC KHÔI PHỤC === */}
 
-            {/* === (NÂNG CẤP) LOGIC HIỂN THỊ PHÂN LOẠI === */}
+            {/* Phân loại (giữ nguyên logic 1 hoặc nhiều) */}
             <div className="border-t pt-4 space-y-4">
-              {/* TRƯỜNG HỢP 1: Có NHIỀU phân loại (id 4) */}
               {product.optionGroups && (
                 product.optionGroups.map((group) => (
                   <div key={group.name}>
@@ -282,7 +295,6 @@ export default function ProductDetail() {
                 ))
               )}
 
-              {/* TRƯỜNG HỢP 2: Có MỘT phân loại (id 3) */}
               {!product.optionGroups && product.variants && product.variants.length > 1 && (
                 <div>
                   <Label htmlFor="variant" className="text-base font-semibold">
@@ -314,14 +326,9 @@ export default function ProductDetail() {
                   </Select>
                 </div>
               )}
-              
-              {/* TRƯỜNG HỢP 3: Chỉ có 1 variant hoặc không có (id 1, 2) -> không hiển thị gì */}
-
             </div>
-            {/* === KẾT THÚC NÂNG CẤP === */}
 
-
-            {/* ... (Phần Quantity và Action Buttons giữ nguyên) ... */}
+            {/* Quantity (giữ nguyên) */}
             <div className="border-t pt-4">
               <Label htmlFor="quantity" className="text-base font-semibold">
                 Số lượng
@@ -344,6 +351,7 @@ export default function ProductDetail() {
               </div>
             </div>
 
+            {/* Action Buttons (giữ nguyên) */}
             <div className="border-t pt-4 space-y-3">
               <Button 
                 onClick={handleAddToCart}
