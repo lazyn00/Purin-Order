@@ -34,6 +34,8 @@ export default function ProductDetail() {
   const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({});
   const [isExpired, setIsExpired] = useState(false);
   
+  // (Các useEffect và handlers giữ nguyên)
+  // ...
   useEffect(() => {
     if (carouselApi && selectedVariant && product?.variantImageMap) {
       const imageIndex = product.variantImageMap[selectedVariant];
@@ -170,19 +172,25 @@ export default function ProductDetail() {
         </Button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Image Carousel (Đã sửa lại kích thước ảnh) */}
+          {/* Image Carousel (Đã sửa lại để giữ định dạng ảnh gốc) */}
           <div className="space-y-4">
             <Carousel className="w-full" setApi={setCarouselApi}>
               <CarouselContent>
                 {product.images.map((image, index) => (
                   <CarouselItem key={index}>
-                    <div className="relative overflow-hidden rounded-lg border aspect-square flex items-center justify-center"> {/* Thêm flex để căn giữa */}
+                    {/* === (ĐÃ SỬA LỖI) Giữ định dạng ảnh gốc === */}
+                    {/*
+                      Chúng ta tạo 1 ô vuông `aspect-square` làm nền
+                      và dùng `object-contain` để ảnh gốc nằm bên trong ô đó
+                    */}
+                    <div className="relative overflow-hidden rounded-lg border aspect-square flex items-center justify-center bg-muted/20">
                       <img
                         src={image}
                         alt={`${product.name} - ${index + 1}`}
-                        className="max-h-[500px] max-w-full object-contain" // Sử dụng max-h và object-contain
+                        className="max-h-full max-w-full object-contain" // Giữ định dạng gốc
                       />
                     </div>
+                    {/* === KẾT THÚC SỬA LỖI === */}
                   </CarouselItem>
                 ))}
               </CarouselContent>
