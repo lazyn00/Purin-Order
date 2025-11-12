@@ -6,7 +6,6 @@ export const productsData = [
     priceDisplay: "83,000đ",
     description: [
       "Set 20 cái sticker (mỗi mẫu 2 cái)",
-      "Giá đã bao gồm cân và ship nội địa dự kiến"
     ], // <- thêm dấu phẩy ở đây
     images: [
       "https://i.imgur.com/TILP0up.jpeg",
@@ -19,12 +18,12 @@ export const productsData = [
     ],
     category: "Merch",
     artist: "CORTIS",
-    variants: ["Full Set 6 members"],
+    variants: ["Full Set 5 members"],
     variantImageMap: {
       "Full Set 6 members": 0
     },
     feesIncluded: true,
-    master: "CORTIS Official"
+    master: "seeuKJH (xhs)"
   },
   {
     id: 2,
@@ -33,19 +32,24 @@ export const productsData = [
     priceDisplay: "79,000đ",
     description: [
       "Set 6 cái sticker",
-      "Giá đã bao gồm cân và ship nội địa dự kiến"
     ], // <- dùng mảng để xuống dòng, và nhớ dấu phẩy
     images: [
-      "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=800",
-      "https://images.unsplash.com/photo-1614680376739-414d95ff43df?w=800"
+      "https://i.imgur.com/tehKjkX.jpeg",
+      "https://i.imgur.com/XDRRCij.jpeg",
+      "https://i.imgur.com/WQ0kvi4.jpeg",
+      "https://i.imgur.com/PsPd1g8.jpeg",
+      "https://i.imgur.com/wqlrhND.jpeg",
+      "https://i.imgur.com/v7IoLcY.jpeg",
+      "https://i.imgur.com/MiEYr9H.jpeg",
+      "https://i.imgur.com/lvr0PO4.jpeg"
     ],
     category: "Merch",
     artist: "CORTIS",
-    variants: ["Full Set 6 members"],
+    variants: ["Full Set 5 members"],
     variantImageMap: {
-      "Full Set 6 members": 0
+      "Full Set 5 members": 0
     },
-    feesIncluded: false,
+    feesIncluded: true,
     master: "Korean Sticker Shop"
   }
 ];
