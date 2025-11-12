@@ -55,7 +55,9 @@ export default function Products() {
                 <SelectContent>
                   <SelectItem value="all">Tất cả danh mục</SelectItem>
                   <SelectItem value="Outfit & Doll">Outfit & Doll</SelectItem>
-                  <SelectItem value."Merch">Merch</SelectItem>
+                  {/* === (ĐÃ SỬA LỖI) === */}
+                  <SelectItem value="Merch">Merch</SelectItem>
+                  {/* === KẾT THÚC SỬA LỖI === */}
                   <SelectItem value="Khác">Khác</SelectItem>
                 </SelectContent>
               </Select>
@@ -89,7 +91,7 @@ export default function Products() {
                   <SelectItem value="price-asc">Giá: Thấp đến cao</SelectItem>
                   <SelectItem value="price-desc">Giá: Cao đến thấp</SelectItem>
                   <SelectItem value="name">Tên A-Z</SelectItem>
-                </Content>
+                </SelectContent>
               </Select>
             </div>
           </div>
