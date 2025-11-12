@@ -17,50 +17,48 @@ type Product = {
   variants: ProductVariant[];
 };
 
-// Hàm helper 1: Chỉ định dạng "k"
-const formatPriceK = (price: number) => {
-  const priceInK = Math.round(price / 1000);
-  return `${priceInK}k`;
+// === (SỬA ĐỔI) HÀM HELPER 1 ===
+// Đổi lại thành định dạng "đ" (83000 -> "83.000đ")
+const formatPrice = (price: number) => {
+  return `${price.toLocaleString('vi-VN')}đ`;
 };
+// === KẾT THÚC SỬA ĐỔI ===
 
-// Hàm helper 2: Lấy khoảng giá (LUÔN LUÔN ra "k")
-const getPriceRange = (variants: ProductVariant[], defaultPrice: number): string => {
+
+// === (SỬA ĐỔI) HÀM HELPER 2 ===
+// Đổi tên từ getPriceRange thành getMinPrice (lấy giá rẻ nhất)
+const getMinPrice = (variants: ProductVariant[], defaultPrice: number): number => {
+  // Nếu không có variant, dùng giá gốc
   if (!variants || variants.length === 0) {
-    return formatPriceK(defaultPrice);
+    return defaultPrice;
   }
 
+  // Tìm giá rẻ nhất trong các variants
   let minPrice = variants[0].price;
-  let maxPrice = variants[0].price;
-
-  if (variants.length > 1) {
-    for (const variant of variants) {
-      if (variant.price < minPrice) minPrice = variant.price;
-      if (variant.price > maxPrice) maxPrice = variant.price;
+  for (const variant of variants) {
+    if (variant.price < minPrice) {
+      minPrice = variant.price;
     }
-  } else {
-    minPrice = maxPrice = variants[0].price;
   }
-
-  const minK = Math.round(minPrice / 1000);
-  const maxK = Math.round(maxPrice / 1000);
-
-  if (minK === maxK) {
-    return `${minK}k`;
-  }
-
-  return `${minK}k - ${maxK}k`;
+  
+  return minPrice;
 };
+// === KẾT THÚC SỬA ĐỔI ===
 
 
 export function ProductCard({ product }: { product: Product }) {
   const thumbnail = product.images[0] || "https://i.imgur.com/placeholder.png";
-  const priceDisplay = getPriceRange(product.variants, product.price);
+  
+  // 1. Lấy giá trị số rẻ nhất
+  const minPriceValue = getMinPrice(product.variants, product.price);
+  
+  // 2. Chuyển giá trị đó sang định dạng "đ"
+  const priceDisplay = formatPrice(minPriceValue);
 
   return (
     <Link to={`/product/${product.id}`} className="group block">
       <div className="overflow-hidden rounded-sm bg-card shadow-sm transition-shadow hover:shadow-md">
         
-        {/* (Phần ảnh giữ nguyên) */}
         <div className="relative aspect-square overflow-hidden">
           <img
             src={thumbnail}
@@ -77,18 +75,13 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
 
-        {/* (Phần Tên và Giá) */}
         <div className="p-2">
-          {/* === (ĐÃ SỬA LỖI ĐỊNH DẠNG) === */}
-          {/*
-            Trước đó: "h-8 text-xs font-normal line-clamp-2 md:text-sm md:h-10"
-            Bây giờ: To hơn (text-sm), in đậm (font-semibold), và chiều cao cố định (h-10)
-          */}
+          {/* (Giữ nguyên định dạng tên sản phẩm) */}
           <h3 className="h-10 text-sm font-semibold line-clamp-2">
             {product.name}
           </h3>
-          {/* === KẾT THÚC SỬA LỖI === */}
-
+          
+          {/* (Hiển thị giá rẻ nhất đã định dạng) */}
           <p className="mt-1 truncate text-sm font-bold text-primary md:text-base">
             {priceDisplay}
           </p>
