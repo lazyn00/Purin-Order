@@ -1,16 +1,14 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
-// === DÁN URL APPS SCRIPT CỦA BẠN VÀO ĐÂY ===
+// === DÁN URL APPS SCRIPT (ĐỌC SẢN PHẨM) CỦA BẠN VÀO ĐÂY ===
 const GAS_PRODUCTS_URL = "https://script.google.com/macros/s/AKfycbzMAcPL0WRqnTQXc3Os4U6EkCRWL-7nDyZtSaugY_MERdjhPFmxFMC80gspGSWgFS_8XA/exec";
-// === NHỚ THAY THẾ URL TRÊN ===
+// ===
 
-
-// (Định nghĩa Product giữ nguyên)
+// Định nghĩa kiểu Product mới (từ Google Sheet)
 export interface Product {
   id: number;
   name: string;
   price: number;
-  priceDisplay: string; // trường này sẽ không còn dùng nữa, nhưng giữ lại cho đỡ lỗi
   description: string[];
   images: string[];
   category: string;
@@ -22,6 +20,7 @@ export interface Product {
   master?: string;
   status?: string;
   orderDeadline?: string | null;
+  priceDisplay: string; // Giữ lại trường này cho đỡ lỗi
 }
 export interface CartItem extends Product {
   quantity: number;
@@ -37,10 +36,9 @@ interface CartContextType {
   totalItems: number;
   totalPrice: number;
   
-  // === (THÊM MỚI) State cho sản phẩm ===
+  // State cho sản phẩm
   products: Product[];
   isLoading: boolean;
-  // === KẾT THÚC THÊM MỚI ===
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -48,23 +46,20 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   
-  // === (THÊM MỚI) State và useEffect để tải sản phẩm ===
+  // State và useEffect để tải sản phẩm
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        if (GAS_PRODUCTS_URL.includes("ABC...")) {
-           console.error("LỖI: Bạn chưa cập nhật URL Google Apps Script trong CartContext.tsx");
-           throw new Error("GAS URL not set");
-        }
-        
         const response = await fetch(GAS_PRODUCTS_URL);
         const data = await response.json();
         
         if (data.products) {
           setProducts(data.products);
+        } else {
+          console.error("Lỗi tải products:", data.error);
         }
       } catch (error) {
         console.error("Không thể tải sản phẩm từ Google Sheet:", error);
@@ -74,11 +69,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     };
 
     fetchProducts();
-  }, []);
-  // === KẾT THÚC THÊM MỚI ===
+  }, []); // Tải 1 lần duy nhất
 
-
-  // (Các hàm giỏ hàng giữ nguyên)
+  // (Các hàm giỏ hàng đã sửa lỗi)
   const addToCart = (product: Product, quantity: number, variant: string) => {
     setCartItems(prev => {
       const existingItem = prev.find(item => 
@@ -130,7 +123,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       clearCart,
       totalItems,
       totalPrice,
-      // (Thêm state mới vào provider)
       products, 
       isLoading
     }}>
