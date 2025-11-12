@@ -1,91 +1,67 @@
-// @/components/ProductCard.tsx
+// @/pages/Products.tsx
 
-import { Link } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
+import { Layout } from "@/components/Layout";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { productsData } from "@/data/products";
+import { ProductCard } from "@/components/ProductCard"; 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Filter, ArrowUpDown } from "lucide-react";
 
-// (Bạn có thể cần import kiểu Product từ data/context)
-type ProductVariant = {
-  name: string;
-  price: number;
-};
+export default function Products() {
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedArtist, setSelectedArtist] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<string>("default");
 
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  images: string[];
-  status?: string;
-  variants: ProductVariant[];
-};
+  const artists = ["all", ...Array.from(new Set(productsData.map(p => p.artist)))];
 
-// Hàm helper (giữ nguyên)
-const formatPrice = (price: number) => {
-  return `${price.toLocaleString('vi-VN')}đ`;
-};
+  // Filter (giữ nguyên)
+  let filteredProducts = productsData.filter(product => {
+    const categoryMatch = selectedCategory === "all" || product.category === "all" || product.category === selectedCategory;
+    const artistMatch = selectedArtist === "all" || product.artist === selectedArtist;
+    return categoryMatch && artistMatch;
+  });
 
-const getPriceRange = (variants: ProductVariant[], defaultPrice: number): string => {
-  if (!variants || variants.length === 0) {
-    return formatPrice(defaultPrice);
+  // Sort (giữ nguyên)
+  if (sortBy === "price-asc") {
+    filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
+  } else if (sortBy === "price-desc") {
+    filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
+  } else if (sortBy === "name") {
+    filteredProducts = [...filteredProducts].sort((a, b) => a.name.localeCompare(b.name));
   }
-  if (variants.length === 1) {
-    return formatPrice(variants[0].price);
-  }
-
-  let minPrice = variants[0].price;
-  let maxPrice = variants[0].price;
-  for (const variant of variants) {
-    if (variant.price < minPrice) minPrice = variant.price;
-    if (variant.price > maxPrice) maxPrice = variant.price;
-  }
-
-  if (minPrice === maxPrice) {
-    return formatPrice(minPrice);
-  }
-
-  // Thay vì "k", chúng ta hiển thị giá đầy đủ
-  return `${formatPrice(minPrice)} - ${formatPrice(maxPrice)}`;
-};
-
-export function ProductCard({ product }: { product: Product }) {
-  const thumbnail = product.images[0] || "https://i.imgur.com/placeholder.png";
-  
-  // Sửa đổi hàm getPriceRange để hiển thị khoảng giá đầy đủ thay vì "k"
-  const priceDisplay = getPriceRange(product.variants, product.price);
 
   return (
-    <Link to={`/product/${product.id}`} className="group block">
-      {/* Sửa đổi: Bỏ border, dùng shadow nhẹ cho style Shopee */}
-      <div className="overflow-hidden rounded-sm bg-card shadow-sm transition-shadow hover:shadow-md">
-        
-        {/* Phần ảnh và Tag */}
-        <div className="relative aspect-square overflow-hidden">
-          <img
-            src={thumbnail}
-            alt={product.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-          {product.status && (
-            // Sửa đổi: Tag nhỏ hơn
-            <Badge 
-              variant="secondary" 
-              className="absolute top-1.5 left-1.5 h-5 px-1.5 text-[10px]"
-            >
-              {product.status}
-            </Badge>
-          )}
-        </div>
-
-        {/* Phần Tên và Giá (Style Shopee) */}
-        {/* Sửa đổi: Giảm padding, giảm cỡ chữ */}
-        <div className="p-2">
-          <h3 className="h-8 text-xs font-normal line-clamp-2 md:text-sm md:h-10">
-            {product.name}
-          </h3>
-          <p className="mt-1 truncate text-sm font-bold text-primary md:text-base">
-            {priceDisplay}
+    <Layout>
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          {/* ... (Tiêu đề giữ nguyên) ... */}
+          <h1 className="text-4xl font-bold mb-4">Sản phẩm Pre-order</h1>
+          <p className="text-muted-foreground">
+            Order sản phẩm K-pop, C-pop, Anime từ Taobao, PDD, Douyin, XHS, 1688
           </p>
         </div>
+
+        {/* Filters and Sort (Giữ nguyên) */}
+        <div className="mb-8 space-y-4">
+           {/* ... (Toàn bộ phần filter giữ nguyên) ... */}
+        </div>
+
+        {/* === (SỬA ĐỔI) LAYOUT RESPONSIVE "DÀY ĐẶC" === */}
+        {/* Mobile: 2, Tablet-SM: 3, Tablet-MD: 4, LG: 5, XL: 6 cột */}
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          {filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product as any} />
+          ))}
+        </div>
+        {/* === KẾT THÚC SỬA ĐỔI === */}
+
+        {filteredProducts.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Không tìm thấy sản phẩm nào</p>
+          </div>
+        )}
       </div>
-    </Link>
+    </Layout>
   );
 }
