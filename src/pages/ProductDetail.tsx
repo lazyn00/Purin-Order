@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-// Thêm icon ArrowLeft
 import { ShoppingCart, Minus, Plus, CalendarOff, ArrowLeft } from "lucide-react";
 import { productsData } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
@@ -35,7 +34,8 @@ export default function ProductDetail() {
   const [selectedOptions, setSelectedOptions] = useState<{ [key: string]: string }>({});
   const [isExpired, setIsExpired] = useState(false);
   
-  // useEffect cho Carousel
+  // (Các hàm useEffect và handlers giữ nguyên)
+  // ...
   useEffect(() => {
     if (carouselApi && selectedVariant && product?.variantImageMap) {
       const imageIndex = product.variantImageMap[selectedVariant];
@@ -45,7 +45,6 @@ export default function ProductDetail() {
     }
   }, [selectedVariant, carouselApi, product]);
 
-  // useEffect khởi tạo
   useEffect(() => {
     if (product) {
       setCurrentPrice(product.price);
@@ -72,7 +71,6 @@ export default function ProductDetail() {
     }
   }, [product]);
 
-  // useEffect xử lý 2+ phân loại
   useEffect(() => {
     if (product?.optionGroups) {
       const allOptionsSelected = Object.values(selectedOptions).every(val => val !== "");
@@ -103,7 +101,6 @@ export default function ProductDetail() {
     }
   }, [selectedOptions, product, carouselApi]);
   
-  // Hàm Add To Cart
   const handleAddToCart = () => {
     const hasVariants = product.variants && product.variants.length > 0;
 
@@ -132,7 +129,6 @@ export default function ProductDetail() {
     });
   };
 
-  // Hàm xử lý 2+ phân loại
   const handleOptionChange = (groupName: string, value: string) => {
     setSelectedOptions(prev => ({
       ...prev,
@@ -140,7 +136,6 @@ export default function ProductDetail() {
     }));
   };
 
-  // Hàm xử lý 1 phân loại
   const handleVariantChange = (variantName: string) => {
     setSelectedVariant(variantName);
     const variant = product.variants.find(v => v.name === variantName);
@@ -151,6 +146,7 @@ export default function ProductDetail() {
   
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => Math.max(1, prev - 1));
+  // ...
 
   if (!product) {
     return (
@@ -178,7 +174,7 @@ export default function ProductDetail() {
         </Button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Image Carousel (Đã sửa object-contain và clickable) */}
+          {/* Image Carousel (giữ nguyên) */}
           <div className="space-y-4">
             <Carousel className="w-full" setApi={setCarouselApi}>
               <CarouselContent>
@@ -252,19 +248,35 @@ export default function ProductDetail() {
               )}
             </div>
             
-            {/* KHÔI PHỤC MÔ TẢ */}
-            {product.description && product.description.length > 0 && (
-              <div className="border-t pt-4 space-y-3">
-                <div>
-                  <h3 className="font-semibold mb-2">Mô tả sản phẩm</h3>
-                  <ul className="text-muted-foreground space-y-1 list-disc list-inside">
-                    {product.description.map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
+            {/* === (KHÔI PHỤC) MÔ TẢ & MASTER === */}
+            {/* Chỉ hiển thị block này nếu có description hoặc master */}
+            {(product.description && product.description.length > 0) || product.master ? (
+              <div className="border-t pt-4 space-y-4">
+                
+                {/* Phần Mô tả (chỉ hiện nếu có) */}
+                {product.description && product.description.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold mb-2">Mô tả sản phẩm</h3>
+                    <ul className="text-muted-foreground space-y-1 list-disc list-inside">
+                      {product.description.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Phần Master (chỉ hiện nếu có) */}
+                {product.master && (
+                  <div>
+                    <h3 className="font-semibold mb-1">Master</h3>
+                    <p className="text-muted-foreground">{product.master}</p>
+                  </div>
+                )}
+
               </div>
-            )}
+            ) : null}
+            {/* === KẾT THÚC KHÔI PHỤC === */}
+
 
             {/* LOGIC PHÂN LOẠI (1 hoặc 2) */}
             <div className="border-t pt-4 space-y-4">
