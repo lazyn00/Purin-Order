@@ -50,8 +50,8 @@ export default function ProductDetail() {
       setCurrentPrice(product.price);
       
       // === (SỬA 1: HẠN ORDER) ===
-      if (product.orderdeadline) {
-        const deadline = new Date(product.orderdeadline);
+      if (product.orderDeadline) {
+        const deadline = new Date(product.orderDeadline);
         if (deadline < new Date()) setIsExpired(true);
       } else if (product.status === "Sẵn") {
          setIsExpired(false);
@@ -263,9 +263,9 @@ export default function ProductDetail() {
               </p>
               
               {/* === (SỬA 4: HẠN ORDER) === */}
-              {product.orderdeadline && !isExpired && (
+              {product.orderDeadline && !isExpired && (
                  <p className="text-sm text-amber-600 mt-2">
-                   Hạn order: {new Date(product.orderdeadline).toLocaleString('vi-VN')}
+                   Hạn order: {new Date(product.orderDeadline).toLocaleString('vi-VN')}
                  </p>
               )}
               {isExpired && (

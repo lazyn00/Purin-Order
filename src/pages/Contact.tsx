@@ -1,41 +1,8 @@
 import { Layout } from "@/components/Layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Facebook, Instagram, MessageSquare, Music2 } from "lucide-react";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: ""
-  });
-  const { toast } = useToast();
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // TODO: Gửi data vào Google Sheet
-    console.log("Contact form:", formData);
-
-    toast({
-      title: "Gửi thành công!",
-      description: "Chúng tôi sẽ phản hồi sớm nhất có thể.",
-    });
-
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      message: ""
-    });
-  };
-
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12">
@@ -44,98 +11,36 @@ export default function Contact() {
           <p className="text-muted-foreground">Purin Order luôn sẵn sàng hỗ trợ bạn 💛</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Contact Form */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Gửi tin nhắn</CardTitle>
-              <CardDescription>
-                Điền thông tin và tin nhắn của bạn, Purin sẽ phản hồi trong thời gian sớm nhất
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Label htmlFor="name">Họ và tên *</Label>
-                  <Input
-                    id="name"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Nguyễn Văn A"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="email">Email *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="email@example.com"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="phone">Số điện thoại</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="0395939035"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="message">Tin nhắn *</Label>
-                  <Textarea
-                    id="message"
-                    required
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Nội dung cần hỗ trợ..."
-                    rows={5}
-                  />
-                </div>
-                <Button type="submit" className="w-full bg-gradient-primary">
-                  Gửi tin nhắn
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-
-          {/* Contact Info */}
+        <div className="max-w-2xl mx-auto">
           <div className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Thông tin liên hệ</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-accent rounded-lg text-accent-foreground">
-                    <Mail className="w-5 h-5" />
-                  </div>
+                <div className="flex items-center gap-3">
+                  <Phone className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="font-semibold">Email</p>
-                    <p className="text-muted-foreground">ppurin.order@gmail.com</p>
+                    <p className="font-medium">Điện thoại</p>
+                    <a href="tel:0395939035" className="text-muted-foreground hover:text-primary">
+                      0395 939 035
+                    </a>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-accent rounded-lg text-accent-foreground">
-                    <Phone className="w-5 h-5" />
-                  </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="font-semibold">Hotline</p>
-                    <p className="text-muted-foreground">0395939035</p>
+                    <p className="font-medium">Email</p>
+                    <a href="mailto:purinorder@gmail.com" className="text-muted-foreground hover:text-primary">
+                      purinorder@gmail.com
+                    </a>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-accent rounded-lg text-accent-foreground">
-                    <MapPin className="w-5 h-5" />
-                  </div>
+                <div className="flex items-center gap-3">
+                  <MapPin className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="font-semibold">Địa chỉ</p>
-                    <p className="text-muted-foreground">Thành phố Hồ Chí Minh</p>
+                    <p className="font-medium">Địa chỉ</p>
+                    <p className="text-muted-foreground">TP. Hồ Chí Minh, Việt Nam</p>
                   </div>
                 </div>
               </CardContent>
@@ -144,44 +49,43 @@ export default function Contact() {
             <Card>
               <CardHeader>
                 <CardTitle>Mạng xã hội</CardTitle>
-                <CardDescription>Theo dõi Purin để cập nhật sản phẩm mới nhất 💫</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <a
-                  href="https://www.facebook.com/puorderin/"
-                  target="_blank"
+              <CardContent className="space-y-4">
+                <a 
+                  href="https://facebook.com/purinorder" 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent transition-colors"
+                  className="flex items-center gap-3 hover:text-primary transition-colors"
                 >
-                  <Facebook className="w-5 h-5 text-primary" />
-                  <span className="font-medium">Facebook: @puorderin</span>
+                  <Facebook className="h-5 w-5" />
+                  <span>Facebook: Purin Order</span>
                 </a>
-                <a
-                  href="https://www.instagram.com/purin_order/"
-                  target="_blank"
+                <a 
+                  href="https://instagram.com/purinorder" 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent transition-colors"
+                  className="flex items-center gap-3 hover:text-primary transition-colors"
                 >
-                  <Instagram className="w-5 h-5 text-primary" />
-                  <span className="font-medium">Instagram: @purin_order</span>
+                  <Instagram className="h-5 w-5" />
+                  <span>Instagram: @purinorder</span>
                 </a>
-                <a
-                  href="https://www.threads.com/@purin_order"
-                  target="_blank"
+                <a 
+                  href="https://t.me/purinorder" 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent transition-colors"
+                  className="flex items-center gap-3 hover:text-primary transition-colors"
                 >
-                  <MessageSquare className="w-5 h-5 text-primary" />
-                  <span className="font-medium">Threads: @purin_order</span>
+                  <MessageSquare className="h-5 w-5" />
+                  <span>Telegram: @purinorder</span>
                 </a>
-                <a
-                  href="https://www.tiktok.com/@purin_order/"
-                  target="_blank"
+                <a 
+                  href="https://tiktok.com/@purinorder" 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-accent transition-colors"
+                  className="flex items-center gap-3 hover:text-primary transition-colors"
                 >
-                  <Music2 className="w-5 h-5 text-primary" />
-                  <span className="font-medium">TikTok: @purin_order</span>
+                  <Music2 className="h-5 w-5" />
+                  <span>TikTok: @purinorder</span>
                 </a>
               </CardContent>
             </Card>
@@ -190,8 +94,12 @@ export default function Contact() {
               <CardHeader>
                 <CardTitle>Giờ làm việc</CardTitle>
               </CardHeader>
-              <CardContent className="text-muted-foreground space-y-2">
-                <p><strong>Luôn mở cửa</strong> — Purin luôn sẵn sàng hỗ trợ bạn bất cứ lúc nào 💛</p>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Thứ 2 - Thứ 6: 9:00 - 18:00<br />
+                  Thứ 7: 9:00 - 16:00<br />
+                  Chủ nhật: Nghỉ
+                </p>
               </CardContent>
             </Card>
           </div>
