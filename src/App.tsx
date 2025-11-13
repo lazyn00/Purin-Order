@@ -7,14 +7,11 @@ import { CartProvider } from "./contexts/CartContext";
 import Index from "./pages/Index";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
-import Guide from "./pages/Guide";
 import Policy from "./pages/Policy";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
-
-// === (THÊM MỚI 1/2) Import trang checkout ===
 import Checkout from "./pages/Checkout";
-// === KẾT THÚC THÊM MỚI ===
+import TrackOrder from "./pages/TrackOrder";
 
 const queryClient = new QueryClient();
 

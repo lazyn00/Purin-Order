@@ -83,11 +83,10 @@ export default function Policy() {
                 </li>
               </ul>
               
-              {/* Giữ nguyên phần lưu ý màu cam */}
-              <div className="bg-yellow-50 border-l-4 border-amber-500 text-amber-700 p-4 rounded-md mt-6">
-                <p className="font-bold">Lưu ý:</p>
-                <p className="text-sm">Không hoàn tiền vì khác hình, lỗi xưởng, hoặc đổi ý.</p>
-              </div>
+              {/* Chỉ in đậm, không đóng khung */}
+              <p className="mt-6">
+                <span className="font-bold">Lưu ý:</span> Không hoàn tiền vì khác hình, lỗi xưởng, hoặc đổi ý.
+              </p>
             </CardContent>
           </Card>
           {/* === KẾT THÚC SỬA === */}

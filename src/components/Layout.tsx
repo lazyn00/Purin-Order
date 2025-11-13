@@ -3,13 +3,14 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Cart } from "./Cart";
+import { ScrollToTop } from "./ScrollToTop";
 
 const menuItems = [
   { path: "/", label: "Giới thiệu" },
   { path: "/products", label: "Sản phẩm" },
-  { path: "/guide", label: "Hướng dẫn" },
   { path: "/policy", label: "Chính sách" },
   { path: "/contact", label: "Liên hệ" },
+  { path: "/track-order", label: "Tra đơn" },
 ];
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -87,6 +88,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
       </footer>
+      
+      <ScrollToTop />
     </div>
   );
 };
